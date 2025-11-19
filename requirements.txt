@@ -1,7 +1,5 @@
 streamlit
-textblob
-sckikit-learn
-numpy
 pandas
-nltk
-
+numpy
+sckikit-learn
+matplotlib
