@@ -3,5 +3,5 @@ textblob
 sckikit-learn
 numpy
 pandas
-nltk 
+nltk
 
