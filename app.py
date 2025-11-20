@@ -1,4 +1,3 @@
-# app.py
 import streamlit as st
 import joblib
 import pickle
@@ -7,58 +6,139 @@ import os
 import pandas as pd
 import numpy as np
 
-# ---------------------------
-# PAGE CONFIG (must be top)
-# ---------------------------
+
 st.set_page_config(page_title="Mindful — Emotional Assistant", layout="wide", page_icon="💛")
 
-# ---------------------------
-# STYLE: Warm & Cozy
-# ---------------------------
+
 st.markdown(
     """
-    <style>
-    :root {
-        --bg: #fff8f2;
-        --card: #fff2e6;
-        --muted: #7a6b63;
-        --accent: #ffb997;
-        --accent-2: #ffd8b5;
-        --shadow: rgba(20,20,20,0.08);
-    }
-    .stApp {
-        background: var(--bg);
-        color: #6E6E6E;
-    }
-    .card {
-        background: var(--card);
-        border-radius: 14px;
-        padding: 20px;
-        box-shadow: 0 8px 24px var(--shadow);
-        transition: transform .18s ease, box-shadow .18s ease;
-        cursor: pointer;
-        border: 1px solid rgba(0,0,0,0.03);
-        text-align:center;
-    }
-    .card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 18px 40px rgba(0,0,0,0.10);
-    }
-    .card h3 { margin: 0 0 6px 0; color: #2b2b2b; }
-    .muted { color: var(--muted); font-size: 0.95rem; }
-    .small { font-size: 0.88rem; color: #6a5a52; }
-    .section {
-        background: #fff;
-        border-radius: 12px;
-        padding: 18px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.04);
-    }
+<style>
+
+:root {
+    --bg: #fff8f2;
+    --card: #fff2e6;
+    --muted: #7a6b63;
+    --accent: #ffb997;
+    --accent-2: #ffd8b5;
+    --shadow: rgba(20,20,20,0.08);
+}
+
+/* ---------- APP BG + BASE ---------- */
+.stApp {
+    background: var(--bg);
+    color: #6a5a52;
+}
+
+/* ---------- CARDS ---------- */
+.card {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid rgba(0,0,0,0.03);
+    box-shadow: 0 8px 24px var(--shadow);
+    transition: 0.18s ease;
+}
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.10);
+}
+.card h3 {
+    color: #2b2b2b !important;
+}
+
+/* ---------- GENERAL TEXT ---------- */
+.small, .muted {
+    color: var(--muted) !important;
+}
+.section {
+    background: #fffdfa !important;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+}
+
+/* ---------- INPUT + TEXTAREA ---------- */
+textarea, input {
+    color: #ffffff !important; /* typed text white */
+    caret-color: #ffffff !important;
+}
+textarea::placeholder, input::placeholder {
+    color: #e8e1db !important;
+}
+
+/* Input/textarea labels */
+.stTextInput label,
+.stTextArea label {
+    color: #5a4a42 !important;
+    opacity: 1 !important;
+}
+
+/* ---------- INFO + WARNING BOXES ---------- */
+.stAlert, .stInfo, .stWarning {
+    color: #4a3f39 !important;
+}
+
+/* ---------- SECTION HEADERS INSIDE BOXES ---------- */
+.section h2 {
+    color: #4a3f39 !important;
+}
+
+/* ---------- MARKDOWN HEADING FIXES ---------- */
+[data-testid="stMarkdown"] h1,
+[data-testid="stMarkdown"] h2,
+[data-testid="stMarkdown"] h3,
+[data-testid="stMarkdown"] h4 {
+    color: #4a3f39 !important;
+    opacity: 1 !important;
+}
+
+/* ---------- SUBHEADER FIX (THE IMPORTANT ONE) ---------- */
+/* THIS is what finally fixes: "Write what's on your mind" */
+[data-testid="stSubheader"] *,
+.stSubheader,
+.stSubheader * {
+    color: #4a3f39 !important;
+    opacity: 1 !important;
+}
+
+/* In case Streamlit wraps it inside Markdown container */
+[data-testid="stMarkdownContainer"] h2,
+[data-testid="stMarkdownContainer"] h3,
+[data-testid="stMarkdownContainer"] h2 *,
+[data-testid="stMarkdownContainer"] h3 * {
+    color: #4a3f39 !important;
+    opacity: 1 !important;
+}
+/* Fix helper-message text blending (info, warning, empty prompts) */
+
+/* Info boxes: "Click a card to see..." */
+[data-testid="stInfo"],
+[data-testid="stInfo"] * {
+    color: #5a4a42 !important; /* readable cocoa-brown */
+    opacity: 1 !important;
+}
+
+/* Warning boxes: "Type something first..." */
+[data-testid="stWarning"],
+[data-testid="stWarning"] * {
+    color: #5a4a42 !important;
+    opacity: 1 !important;
+}
+
+/* Error/safety/warning line: "If you feel unsafe..." */
+[data-testid="stAlert"],
+[data-testid="stAlert"] * {
+    color: #4a3f39 !important; /* slightly deeper warm brown */
+    opacity: 1 !important;
+}
+
 
 </style>
-
-    """,
+""",
     unsafe_allow_html=True,
 )
+
 
 # ---------------------------
 # SILENT MODEL LOAD (tries common filenames)
