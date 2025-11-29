@@ -181,7 +181,7 @@ silent_load()
 # ---------------------------
 # SAFE FALLBACK (used silently if no model)
 # ---------------------------
-ANX_WORDS = {"panic","anxious","scared","worried","overthinking","nervous","fear","shaky","lonely"}
+ANX_WORDS = {"panic","anxious","scared","worried","overthinking","nervous","fear","shaky"}
 DEP_WORDS = {"sad","empty","tired","hopeless","worthless","numb","alone","lost"}
 SUI_WORDS = {"suicide","kill myself","end my life","die","cant go on","no reason to live"}
 
