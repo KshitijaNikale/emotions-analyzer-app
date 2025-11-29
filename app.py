@@ -7,6 +7,9 @@ import pandas as pd
 import numpy as np
 import random
 
+st.cache_data.clear()
+st.cache_resource.clear()
+
 st.set_page_config(page_title="Mindful — Emotional Assistant", layout="wide", page_icon="💛")
 
 st.markdown(
