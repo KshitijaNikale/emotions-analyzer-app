@@ -7,8 +7,6 @@ import pandas as pd
 import numpy as np
 import random
 
-
-
 st.set_page_config(page_title="Mindful — Emotional Assistant", layout="wide", page_icon="💛")
 
 st.markdown(
@@ -133,7 +131,6 @@ textarea::placeholder, input::placeholder {
     color: #4a3f39 !important; /* slightly deeper warm brown */
     opacity: 1 !important;
 }
-
 
 
 </style>
@@ -268,11 +265,6 @@ def predict_with_model(text):
 # ---------------------------
 # HUMAN-FRIENDLY TEXTS & ROUTINES
 # ---------------------------
-
-
-
-
-
 ROUTINES = {
     "Anxiety": [
         "Try the 4-4-6 breathing for 2 minutes (inhale 4s, hold 4s, exhale 6s).",
@@ -289,8 +281,8 @@ ROUTINES = {
         "Stay with someone if you can. Ground with steady breaths.",
         "If you feel unsafe, please reach out to emergency help right away."
     ],
-    "Sadness": [
-        "Start with small self-care: water, fresh air, stretch."
+    "Calm / Neutral": [
+        "You're okay for now — small self-care: water, fresh air, stretch."
     ]
 }
 
@@ -298,7 +290,7 @@ MESSAGES = {
     "Anxiety": "Your words show tension and worry. Start with a grounding breath. You’re safe in this moment.",
     "Depression": "There’s a heaviness in your words. Small, gentle actions can slowly help — you matter.",
     "Suicide": "This looks like crisis language. If you are in danger or thinking about harming yourself, contact local emergency services or a crisis hotline immediately.",
-    "Sadness": "Keep checking in with small self-care."
+    "Calm / Neutral": "Your message seems steady. Keep checking in with small self-care."
 }
 
 # ---------------------------
@@ -320,8 +312,15 @@ clinical_anxiety = [
     ("Uncertainty Intolerance", "Not knowing is hard — that’s anxiety, not a personal flaw.")
 ]
 
+clinical_anger = [
+    ("Emotional Flooding", "You’re overwhelmed — that’s emotional flooding, not danger."),
+    ("Frustration Overload", "Your system is overloaded; that heat is frustration, not failure."),
+    ("Cognitive Narrowing", "Anger narrows focus — that’s a reaction, not a choice."),
+    ("Boundary Trigger", "This fire often comes from a crossed boundary, not because you’re 'too much'."),
+    ("Suppressed Resentment", "This may be resentment built up from feeling unheard, not uncontrollable rage.")
+]
 
-clinical_suicide = [
+clinical_fear = [
     ("Freeze Response", "Your mind is freezing to protect you — not abandoning you."),
     ("Sense of Overwhelm", "You feel swamped — that’s overwhelm, not reality collapsing."),
     ("Safety Seeking", "You’re looking for escape routes — that’s fear, not failure."),
@@ -329,7 +328,7 @@ clinical_suicide = [
     ("Emotional Shock", "Your body is stunned — that’s shock, not brokenness.")
 ]
 
-clinical_sadness = [
+clinical_positive = [
     ("Stable Grounding", "You’re steady right now — hold this space."),
     ("Emotional Clarity", "Your mind feels clearer — trust that clarity."),
     ("Adaptive Thinking", "You’re responding with balance — that’s a healthy pattern."),
@@ -340,14 +339,15 @@ clinical_sadness = [
 clinical_labels = {
     "Depression": clinical_depression,
     "Anxiety": clinical_anxiety,
-    "Suicide": clinical_suicide,
-    "Sadness": clinical_sadness
+    "Anger": clinical_anger,
+    "Fear / Stress": clinical_fear,
+    "Calm / Neutral": clinical_positive
 }
 
 def get_clinical_message(detected_label):
     # Map detected_label string to clinical_labels keys
     if not detected_label:
-        key = "Sadness"
+        key = "Calm / Neutral"
     else:
         dl = detected_label.lower()
         if "depress" in dl:
@@ -356,11 +356,14 @@ def get_clinical_message(detected_label):
             key = "Anxiety"
         elif "sui" in dl:
             key = "Suicide" # no dedicated suicide list; we'll fallback
-
-        elif "sadness" in dl:
-            key = "Sadness"
+        elif "ang" in dl or "rage" in dl:
+            key = "Anger"
+        elif "fear" in dl or "stress" in dl:
+            key = "Fear / Stress"
+        elif "calm" in dl or "neutral" in dl:
+            key = "Calm / Neutral"
         else:
-            key = "Sadness"
+            key = "Calm / Neutral"
 
     # If suicide or unknown, fallback to depression/anxiety combos
     if key == "Suicide":
@@ -371,9 +374,6 @@ def get_clinical_message(detected_label):
 
     label, msg = random.choice(pool)
     return label, msg
-
-
-
 
 # ---------------------------
 # UI: Header + input
@@ -554,4 +554,3 @@ if st.session_state["history"]:
         file_name="mindful_full_session.txt",
         mime="text/plain",
     )
-
