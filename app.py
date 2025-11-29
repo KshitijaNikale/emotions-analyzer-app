@@ -178,7 +178,26 @@ def silent_load():
 
 silent_load()
 
+# ---------------------------
+# SAFE FALLBACK (used silently if no model)
+# ---------------------------
+ANX_WORDS = {"panic","anxious","scared","worried","overthinking","nervous","fear","shaky","lonely"}
+DEP_WORDS = {"sad","empty","tired","hopeless","worthless","numb","alone","lost"}
+SUI_WORDS = {"suicide","kill myself","end my life","die","cant go on","no reason to live"}
 
+def fallback_predict(text):
+    t = clean(text)
+    tokens = set(t.split())
+    a = len(tokens & ANX_WORDS)
+    d = len(tokens & DEP_WORDS)
+    s = len(tokens & SUI_WORDS)
+    scores = {"Anxiety": a, "Depression": d, "Suicide": s}
+    top = max(scores, key=scores.get)
+    if sum(scores.values()) == 0:
+        return "Calm / Neutral", {"Anxiety":0.0,"Depression":0.0,"Suicide":0.0}
+    total = sum(scores.values())
+    probs = {k: round(v/total,2) for k,v in scores.items()}
+    return top, probs
 
 # ---------------------------
 # TEXT CLEANER & METRICS
