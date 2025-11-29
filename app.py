@@ -149,8 +149,8 @@ VECT = None
 
 def silent_load():
     global MODEL, VECT
-    model_files = ["mental_health_model.pkl","model.pkl","mental_health_model.joblib","model.joblib"]
-    vect_files = ["tfidf_vectorizer.pkl","tfidf.pkl","vectorizer.pkl","tfidf_vectorizer.joblib"]
+    model_files = ["mental_health_model.pkl"]
+    vect_files = ["tfidf_vectorizer.pkl"]
     for m in model_files:
         if os.path.exists(m):
             try:
