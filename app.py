@@ -166,6 +166,9 @@ def silent_load():
 
 silent_load()
 
+import streamlit as st
+st.write("Model Loaded:", MODEL is not None)
+st.write("Vectorizer Loaded:", VECT is not None)
 
 # ---------------------------
 # SAFE FALLBACK (used silently if no model)
