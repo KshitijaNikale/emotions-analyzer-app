@@ -7,6 +7,10 @@ import pandas as pd
 import numpy as np
 import random
 
+BASE = os.path.dirname(__file__)
+MODEL_PATH = os.path.join(BASE, "mental_health_model.pkl")
+VECT_PATH = os.path.join(BASE, "tfidf_vectorizer.pkl")
+
 st.set_page_config(page_title="Mindful — Emotional Assistant", layout="wide", page_icon="💛")
 
 st.markdown(
@@ -138,9 +142,7 @@ textarea::placeholder, input::placeholder {
     unsafe_allow_html=True,
 )
 
-BASE = os.path.dirname(__file__)
-MODEL_PATH = os.path.join(BASE, "mental_health_model.pkl")
-VECT_PATH = os.path.join(BASE, "tfidf_vectorizer.pkl")
+
 
 def silent_load():
     global MODEL, VECT
@@ -155,8 +157,10 @@ except Exception as e:
 
 silent_load()
 
-st.write("Model found:", os.path.exists(MODEL_PATH))
-st.write("Vectorizer found:", os.path.exists(VECT_PATH))
+st.write("Model found:",
+         os.path.exists(MODEL_PATH))
+st.write("Vectorizer found:", 
+         os.path.exists(VECT_PATH))
 
 # ---------------------------
 # SAFE FALLBACK (used silently if no model)
