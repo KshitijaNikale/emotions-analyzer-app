@@ -21,7 +21,9 @@ Just Install the requirements and run: streamlit run app.py
 ----------------------------------------------------------
 ##Screenshot
 
+![App Screenshot](emotions-analyzer-app/interface.png)
 
+----------------------------------------------------------------
 
 #Streamlit App Link: https://emotions-analyzer-app.streamlit.app/
 
