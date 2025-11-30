@@ -156,10 +156,7 @@ except Exception as e:
 
 silent_load()
 
-st.write("Model found:",
-         os.path.exists(MODEL_PATH))
-st.write("Vectorizer found:", 
-         os.path.exists(VECT_PATH))
+
 
 # ---------------------------
 # SAFE FALLBACK (used silently if no model)
