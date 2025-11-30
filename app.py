@@ -142,9 +142,7 @@ unsafe_allow_html=True,
 )
 
 ---------------------------
-
 SILENT MODEL LOAD (tries common filenames)
-
 ---------------------------
 
 MODEL = None
