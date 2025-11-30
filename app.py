@@ -141,42 +141,31 @@ textarea::placeholder, input::placeholder {
     unsafe_allow_html=True,
 )
 
-# ---------------------------
-# SILENT MODEL LOAD (tries common filenames)
-# ---------------------------
 MODEL = None
 VECT = None
 
 def silent_load():
     global MODEL, VECT
-    model_files = ["mental_health_model.pkl"]
-    vect_files = ["tfidf_vectorizer.pkl"]
-    for m in model_files:
-        if os.path.exists(m):
-            try:
-                MODEL = joblib.load(m)
-                break
-            except Exception:
-                try:
-                    with open(m,"rb") as f:
-                        MODEL = pickle.load(f)
-                        break
-                except Exception:
-                    continue
-    for v in vect_files:
-        if os.path.exists(v):
-            try:
-                VECT = joblib.load(v)
-                break
-            except Exception:
-                try:
-                    with open(v,"rb") as f:
-                        VECT = pickle.load(f)
-                        break
-                except Exception:
-                    continue
+    BASE = os.path.dirname(os.path.abspath(__file__)) # correct root path
+    MODEL_PATH = os.path.join(BASE, "mental_health_model.pkl")
+    VECT_PATH = os.path.join(BASE, "tfidf_vectorizer.pkl")
+
+    if os.path.exists(MODEL_PATH):
+        try:
+            MODEL = joblib.load(MODEL_PATH)
+        except:
+            with open(MODEL_PATH, "rb") as f:
+                MODEL = pickle.load(f)
+
+    if os.path.exists(VECT_PATH):
+        try:
+            VECT = joblib.load(VECT_PATH)
+        except:
+            with open(VECT_PATH, "rb") as f:
+                VECT = pickle.load(f)
 
 silent_load()
+
 
 # ---------------------------
 # SAFE FALLBACK (used silently if no model)
