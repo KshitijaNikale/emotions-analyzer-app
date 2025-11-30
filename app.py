@@ -151,8 +151,7 @@ try:
     MODEL = joblib.load(MODEL_PATH)
     VECT = joblib.load(VECT_PATH)
 except Exception as e:
-    st.error("MODEL LOAD ERROR:",
-             str(e))
+    st.error(f"MODEL LOAD ERROR: {e}")
     MODEL, VECT = None, None
 
 silent_load()
